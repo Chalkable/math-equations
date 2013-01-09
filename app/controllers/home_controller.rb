@@ -107,7 +107,9 @@ class HomeController < ApplicationController
   private
   def get_access_token(settings, code)
     unless session[:acs_token].nil?
-      return :res => JSON.parse(session[:acs_token]['token']), :error => false if session[:acs_token]['code'] == code
+      if session[:acs_token][:code] == code
+        return :res => JSON.parse(session[:acs_token][:token]), :error => false
+      end
     end
 
     begin
