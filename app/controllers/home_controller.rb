@@ -19,11 +19,11 @@ class HomeController < ApplicationController
     res = get_access_token(APP_CONFIG, @code)
 
 
-    #if res[:error] == true
-    #@error = res
-    #render "home/error"
-    #return
-    #end
+    if res[:error] == true
+      @error = res
+      render "home/error"
+      return
+    end
 
     @acs_token = res[:res]
 
@@ -31,15 +31,20 @@ class HomeController < ApplicationController
 
     user_res = get_current_user(@acs_token['access_token'])
 
-    #if user_res[:error] == true
-    #@error = user_res
-    #render "home/error"
-    #return
-    #end
+    if user_res[:error] == true
+      @error = user_res
+      render "home/error"
+      return
+    end
+
+
 
     @current_user = user_res[:res]
 
     @current_user_id = @current_user['id'].to_i
+
+
+    puts "is_teacher", @current_user[:is_teacher]
 
     #view teacher's question
     if @mode == 'view'
@@ -102,7 +107,7 @@ class HomeController < ApplicationController
   private
   def get_access_token(settings, code)
     unless session[:acs_token].nil?
-      return :res => JSON.parse(session[:acs_token]), :error => false
+      return :res => JSON.parse(session[:acs_token]['token']), :error => false if session[:acs_token]['code'] == code
     end
 
     begin
@@ -118,7 +123,7 @@ class HomeController < ApplicationController
     rescue => e
       return :res => e, :error => true, :stack_trace => e.backtrace
     end
-    session[:acs_token] = @response
+    session[:acs_token] = {:token => @response, :code => code}
     return :res => JSON.parse(@response), :error => false
     #return :res => "", :error => false
   end
