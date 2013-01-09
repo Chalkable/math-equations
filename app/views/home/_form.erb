@@ -1,0 +1,20 @@
+<%if edit_mode %>
+
+
+    <% unless model.nil? %>
+        <%= form_for  model , :url => {:action => action}, :remote => true do |f|%>
+            <%=  hidden_field_tag(:announcement_app_id, announcement_app_id, :class => 'form-field') %>
+            <%=  hidden_field_tag(:schoolperson_id, current_user_id, :class => 'form-field') %>
+            <%=  hidden_field_tag(:edit_mode, edit_mode, :class => 'form-field') %>
+            <div>
+              <%=  f.text_area :content, :class => "tinymce" %>
+            </div>
+        <% end %>
+    <% end %>
+
+<% else %>
+    <div class="content">
+      <textarea class="tiny_mce_simple"><%= content %></textarea>
+    </div>
+<% end %>
+

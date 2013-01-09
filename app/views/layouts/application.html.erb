@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <title>Equations</title>
+
+  <%= stylesheet_link_tag "application" %>
+
+  <%= javascript_include_tag "jquery-1.8.0.min.js" %>
+  <%= javascript_include_tag "#{APP_CONFIG['scope']}/Scripts/api/chlk-post-message-api.js" %>
+  <%= javascript_include_tag "tinymce/jscripts/tiny_mce/tiny_mce.js" %>
+
+
+  <%if @show_plus %>
+    <script type="text/javascript">
+        CHLK_MESSENGER.showPlus();
+    </script>
+  <% end %>
+
+
+
+
+
+  <script type="text/javascript">
+
+
+      function initTiny(selector, readonly){
+          var config = {
+              // Location of TinyMCE script
+              script_url : 'tinymce/jscripts/tiny_mce.js',
+              //mode : "textareas",
+              mode : "specific_textareas",
+              editor_selector : selector,
+              encoding : "xml",
+              // General options
+              theme : "advanced",
+              height : "480",
+              plugins : "lists,pagebreak,style,fmath_formula,paste,directionality,noneditable,visualchars,nonbreaking,xhtmlxtras",
+              // Theme options
+              theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+              theme_advanced_buttons2 : "cut,copy,paste,pastetext,|,search,replace,|,bullist,numlist,|,undo,redo,|,forecolor,backcolor,sub,sup,|,fmath_formula",
+              theme_advanced_buttons3 : "",
+              theme_advanced_toolbar_location : "top",
+              theme_advanced_toolbar_align : "left",
+              theme_advanced_statusbar_location : "none"
+          };
+          var simpleConfig = {
+              script_url : 'tinymce/jscripts/tiny_mce.js',
+              //mode : "textareas",
+              mode : "specific_textareas",
+              editor_selector : selector,
+              encoding : "xml",
+              height : "480",
+              readonly: true,
+              theme: "simple",
+              theme_advanced_statusbar_location : "none"
+          };
+          tinyMCE.init(readonly === true ? simpleConfig : config);
+      }
+      $().ready(function() {
+
+
+
+          initTiny('tiny_mce_simple', true);
+          initTiny('tinymce', false);
+
+          CHLK_MESSENGER.addYourself(function(){
+              var form = jQuery('form');
+              var url = form.attr('action');
+              var id = form.find('.tinymce').attr('id');
+              var name = form.find('.tinymce').attr('name');
+              var editor = tinyMCE.get(id);
+              editor.setProgressState(1); // Show progress
+              var content = editor.getContent();
+
+              var data = {};
+              data[name] = content;
+              jQuery('.form-field').each(function(field){
+                  data[jQuery(this).attr('name')] = jQuery(this).val();
+              });
+
+              data['content'] = content;
+
+
+
+              var options = {
+                  url: url,
+                  type: "post",
+                  data: data,
+                  success:function(res){
+                      editor.setProgressState(0);
+                      editor.setContent(res.content);
+                      CHLK_MESSENGER.addMe();
+                  }
+              };
+              jQuery.ajax(options);
+
+
+              return false;
+          });
+
+      });
+  </script>
+
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>

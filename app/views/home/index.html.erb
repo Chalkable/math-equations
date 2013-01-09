@@ -1,0 +1,84 @@
+<% is_teacher = @current_user[:is_teacher] %>
+
+<% if @mode == 'view'%>
+    <% unless is_teacher %>
+        <div>
+            <h1 class="title">Question</h1>
+            <div id="question">
+                <%= render :partial => 'form',
+                           :locals =>
+                                   {
+                                           :content => @question.nil? ? "" : @question.content,
+                                           :edit_mode => false
+                                   }
+                %>
+            </div>
+        </div>
+
+        <h1 class="title">Answer</h1>
+        <div id="answer">
+            <%= render :partial => 'form' ,
+                       :locals =>
+                               {
+                                       :announcement_app_id => @announcement_app_id,
+                                       :current_user_id => @current_user['id'],
+                                       :edit_mode => true,
+                                       :action => 'post_answer',
+                                       :model => @answer
+                               }
+            %>
+        </div>
+    <% else %>
+
+        <h1 class="title">Question</h1>
+        <div id="question">
+            <%= render :partial => 'form' ,
+                       :locals =>
+                               {
+                                       :announcement_app_id => @announcement_app_id,
+                                       :current_user_id => @current_user['id'],
+                                       :edit_mode => true,
+                                       :action => 'post_question',
+                                       :model => @question
+                               }
+            %>
+        </div>
+    <% end %>
+ <% elsif @mode == 'edit' and is_teacher %>
+    <h1 class="title">Question</h1>
+    <div id="question">
+        <%= render :partial => 'form' ,
+                   :locals =>
+                           {
+                                   :announcement_app_id => @announcement_app_id,
+                                   :current_user_id => @current_user['id'],
+                                   :edit_mode => true,
+                                   :action => 'post_question',
+                                   :model => @question
+                           }
+        %>
+    </div>
+ <% elsif @mode == 'gradingview' and is_teacher %>
+        <div id="question">
+          <h1 class="title">Question</h1>
+            <%= render :partial => 'form',
+                       :locals =>
+                               {
+                                       :content => @question.nil? ? "" : @question.content ,
+                                       :edit_mode => false
+                               }
+            %>
+        </div>
+        <% unless @answer.nil? %>
+           <div id="answer">
+                <h1 class="title">Answer</h1>
+                <%= render :partial => 'form',
+                      :locals =>
+                              {
+                                      :content => @answer.nil? ? "no answer" : @answer.content,
+                                      :edit_mode => false
+                              }
+                %>
+           </div>
+        <% end %>
+ <% end %>

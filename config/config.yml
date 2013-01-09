@@ -1,0 +1,22 @@
+#development:
+#  acs_url: https://chalkable-local-access-control.accesscontrol.windows.net/v2/OAuth2-13
+#  client_id: eq
+#  client_secret: 4d8d2c33949141d8813e1f89f90234255ed92fc5db9f4b04ac45f3fd2f69ed24773195b212f8468cb99159a745d668665822d9bc45dd451b93a2f6af5ccb8265
+#  scope: https://localhost/chalkable/
+#  redirect_uri: http://localhost:3000/home/index
+#  service_url: https://localhost/chalkable/User/Me.json
+development:
+  acs_url: https://chalkable-dev-access-control.accesscontrol.windows.net/v2/OAuth2-13
+  client_id: equations
+  client_secret: 1709946ec9cc46c2bd2a7b3dd6703bd567a437b60cc44d84a82c19e62fc97c2eb49935b6875c4425a2667dee2e84d69decce326c4c5547b38cba751bee740c5e
+  scope: https://dev.chalkable.com
+  redirect_uri: https://chlk-equations.herokuapp.com/home/index
+  service_url: https://dev.chalkable.com/User/Me.json
+production:
+  acs_url: https://chalkable-dev-access-control.accesscontrol.windows.net/v2/OAuth2-13
+  client_id: equations
+  client_secret: 1709946ec9cc46c2bd2a7b3dd6703bd567a437b60cc44d84a82c19e62fc97c2eb49935b6875c4425a2667dee2e84d69decce326c4c5547b38cba751bee740c5e
+  scope: https://dev.chalkable.com
+  redirect_uri: https://chlk-equations.herokuapp.com/home/index
+  service_url: https://dev.chalkable.com/User/Me.json
+test:
