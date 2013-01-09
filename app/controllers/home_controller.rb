@@ -19,11 +19,11 @@ class HomeController < ApplicationController
     res = get_access_token(APP_CONFIG, @code)
 
 
-    if res[:error] == true
-      @error = res
-      render "home/error"
-      return
-    end
+    #if res[:error] == true
+    #@error = res
+    #render "home/error"
+    #return
+    #end
 
     @acs_token = res[:res]
 
@@ -31,11 +31,11 @@ class HomeController < ApplicationController
 
     user_res = get_current_user(@acs_token['access_token'])
 
-    if user_res[:error] == true
-      @error = user_res
-      render "home/error"
-      return
-    end
+    #if user_res[:error] == true
+    #@error = user_res
+    #render "home/error"
+    #return
+    #end
 
     @current_user = user_res[:res]
 
@@ -101,6 +101,10 @@ class HomeController < ApplicationController
 
   private
   def get_access_token(settings, code)
+    unless session[:acs_token].nil?
+      return :res => JSON.parse(session[:acs_token]), :error => false
+    end
+
     begin
       @response = RestClient.post(
           settings['acs_url'],
@@ -114,7 +118,7 @@ class HomeController < ApplicationController
     rescue => e
       return :res => e, :error => true, :stack_trace => e.backtrace
     end
-
+    session[:acs_token] = @response
     return :res => JSON.parse(@response), :error => false
     #return :res => "", :error => false
   end
