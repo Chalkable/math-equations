@@ -19,11 +19,11 @@ class HomeController < ApplicationController
     res = get_access_token(APP_CONFIG, @code)
 
 
-    if res[:error] == true
-      @error = res
-      render "home/error"
-      return
-    end
+    #if res[:error] == true
+    #  @error = res
+    #  render "home/error"
+    #  return
+    #end
 
     @acs_token = res[:res]
 
@@ -31,11 +31,11 @@ class HomeController < ApplicationController
 
     user_res = get_current_user(@acs_token['access_token'])
 
-    if user_res[:error] == true
-      @error = user_res
-      render "home/error"
-      return
-    end
+    #if user_res[:error] == true
+    #  @error = user_res
+    #  render "home/error"
+    #  return
+    #end
 
 
 
