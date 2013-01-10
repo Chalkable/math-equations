@@ -11,14 +11,10 @@
 
 
   <%if @show_plus %>
-    <script type="text/javascript">
-        CHLK_MESSENGER.showPlus();
-    </script>
+      <script type="text/javascript">
+          CHLK_MESSENGER.showPlus();
+      </script>
   <% end %>
-
-
-
-
 
   <script type="text/javascript">
 
@@ -85,17 +81,16 @@
               var options = {
                   url: url,
                   type: "post",
+                  async: false,
                   data: data,
                   success:function(res){
                       editor.setProgressState(0);
                       editor.setContent(res.content);
-                      CHLK_MESSENGER.addMe();
+                      return true;
                   }
               };
               jQuery.ajax(options);
-
-
-              return false;
+              return true;
           });
 
       });

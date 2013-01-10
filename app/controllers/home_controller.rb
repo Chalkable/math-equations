@@ -14,7 +14,8 @@ class HomeController < ApplicationController
     @mode = params[:mode]
     @code = params[:code]
 
-    @show_plus = @mode != 'gradingview'
+    @show_plus = @mode == 'edit'
+
 
     res = get_access_token(APP_CONFIG, @code)
 
@@ -42,9 +43,6 @@ class HomeController < ApplicationController
     @current_user = user_res[:res]
 
     @current_user_id = @current_user['id'].to_i
-
-
-    puts "is_teacher", @current_user[:is_teacher]
 
     #view teacher's question
     if @mode == 'view'
